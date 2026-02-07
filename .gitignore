@@ -30,6 +30,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# logs
+/logs
+*.log
+
 # env files (can opt-in for committing if needed)
 .env*
 
@@ -39,3 +43,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# turbopack
+.turbo
+
+# temporary files
+repos.json
+content/*.log
