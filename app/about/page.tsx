@@ -49,7 +49,6 @@ const skillsData = {
     { name: "C", icon: Code2, level: "Expert", years: 8 },
     { name: "C++", icon: Code2, level: "Advanced", years: 7 },
     { name: "Python", icon: Code2, level: "Advanced", years: 5 },
-    { name: "MATLAB", icon: Code2, level: "Intermediate", years: 3 },
     { name: "Shell", icon: Terminal, level: "Advanced", years: 6 },
     { name: "JavaScript", icon: Code2, level: "Intermediate", years: 2 },
   ],
@@ -57,7 +56,6 @@ const skillsData = {
     { name: "Linux", icon: Terminal, level: "Expert", years: 8 },
     { name: "Broadcom SDK", icon: Cpu, level: "Advanced", years: 6 },
     { name: "Git", icon: Database, level: "Advanced", years: 6 },
-    { name: "GDB", icon: Wrench, level: "Advanced", years: 5 },
     { name: "Make", icon: Wrench, level: "Expert", years: 7 },
     { name: "CMake", icon: Wrench, level: "Advanced", years: 4 },
     { name: "Docker", icon: Database, level: "Intermediate", years: 2 },
@@ -66,7 +64,6 @@ const skillsData = {
   domains: [
     { name: "Embedded Systems", icon: Cpu, level: "Expert", years: 7 },
     { name: "Middleware", icon: Network, level: "Expert", years: 8 },
-    { name: "Kernel Development", icon: Terminal, level: "Advanced", years: 5 },
     { name: "Network Programming", icon: Network, level: "Advanced", years: 6 },
     { name: "System Architecture", icon: Cpu, level: "Advanced", years: 6 },
     { name: "Performance Optimization", icon: Wrench, level: "Advanced", years: 5 },

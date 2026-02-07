@@ -1,147 +1,266 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Mail, Github, MapPin, BookOpen } from "lucide-react"
-import Link from "next/link"
+import { useEffect, useState, useRef } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Terminal, File, Folder } from "lucide-react"
+import { useRouter } from "next/navigation"
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
+interface FileItem {
+    name: string
+    type: "file" | "folder"
+    path: string
 }
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0.25, 0.1, 0.25, 1] as const,
-    },
-  },
-}
+const fileTree: FileItem[] = [
+    { name: "about.me", type: "file", path: "/about" },
+    { name: "projects/", type: "folder", path: "/projects" },
+    { name: "contact.md", type: "file", path: "/contact" },
+    { name: "resume.pdf", type: "file", path: "/resume" },
+    { name: "blog/", type: "folder", path: "https://tae-98.tistory.com/" },
+]
 
 export function Hero() {
-  return (
-    <section className="relative min-h-[90vh] flex items-center justify-center py-20 px-4">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-cyan-50 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950 -z-10" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-100/40 via-transparent to-transparent dark:from-blue-900/20 dark:via-transparent -z-10" />
+    const router = useRouter()
+    const [terminalText, setTerminalText] = useState('')
+    const [showNvim, setShowNvim] = useState(false)
+    const [showFileTree, setShowFileTree] = useState(false)
+    const [showWelcome, setShowWelcome] = useState(false)
+    const hasStartedTyping = useRef(false)
 
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="max-w-4xl mx-auto text-center"
-      >
-        {/* Profile Image */}
-        <motion.div variants={itemVariants} className="mb-8 flex justify-center">
-          <div className="relative">
-            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 p-1 shadow-xl shadow-blue-500/20">
-              <div className="w-full h-full rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                <span className="text-5xl md:text-6xl font-bold bg-gradient-to-br from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                  T
-                </span>
-              </div>
+    useEffect(() => {
+        if (hasStartedTyping.current) return
+        hasStartedTyping.current = true
+
+        const terminalCommand = "nvim devtae.xyz"
+        let currentIndex = 0
+
+        // Start typing after a short delay
+        const startDelay = setTimeout(() => {
+            const intervalId = setInterval(() => {
+                if (currentIndex <= terminalCommand.length) {
+                    setTerminalText(terminalCommand.slice(0, currentIndex))
+                    currentIndex++
+                } else {
+                    clearInterval(intervalId)
+                    // Open NVIM after typing completes
+                    setTimeout(() => {
+                        setShowNvim(true)
+                        setTimeout(() => setShowWelcome(true), 300)
+                        setTimeout(() => setShowFileTree(true), 800)
+                    }, 400)
+                }
+            }, 100)
+
+            return () => clearInterval(intervalId)
+        }, 500)
+
+        return () => clearTimeout(startDelay)
+    }, [])
+
+    const handleFileClick = (item: FileItem) => {
+        if (item.path.startsWith("http")) {
+            window.open(item.path, "_blank")
+        } else {
+            router.push(item.path)
+        }
+    }
+
+    return (
+        <section className="relative min-h-[100vh] flex items-center justify-center py-20 px-4">
+            {/* Static Background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-blue-950 -z-10" />
+            <div className="absolute inset-0 opacity-10">
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(34,211,238,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.1)_1px,transparent_1px)] bg-[size:60px_60px]" />
             </div>
-            <div className="absolute -bottom-2 -right-2 bg-green-500 w-6 h-6 rounded-full border-4 border-white dark:border-gray-900" />
-          </div>
-        </motion.div>
 
-        {/* Greeting */}
-        <motion.p variants={itemVariants} className="text-lg md:text-xl text-muted-foreground mb-4">
-          Hi, I&apos;m
-        </motion.p>
+            <div className="max-w-4xl mx-auto w-full relative z-10">
+                <AnimatePresence>
+                    {!showNvim ? (
+                        /* Terminal */
+                        <motion.div
+                            key="terminal"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+                            transition={{ duration: 0.4 }}
+                        >
+                            {/* Terminal Header */}
+                            <div className="bg-gradient-to-r from-gray-800 via-gray-800 to-gray-900 rounded-t-lg px-4 py-3 flex items-center justify-between border-b border-gray-700">
+                                <div className="flex gap-2">
+                                    <div className="w-3 h-3 rounded-full bg-red-500" />
+                                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Terminal className="w-4 h-4 text-cyan-400" />
+                                    <span className="text-sm font-mono">
+                                        <span className="text-green-400">tae</span>
+                                        <span className="text-gray-500">@</span>
+                                        <span className="text-blue-400">linux</span>
+                                    </span>
+                                </div>
+                                <span className="text-xs text-cyan-400 font-mono">fish</span>
+                            </div>
 
-        {/* Name with gradient */}
-        <motion.h1
-          variants={itemVariants}
-          className="text-6xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-tight"
-        >
-          <span className="bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 bg-clip-text text-transparent bg-[length:200%_auto] animate-shimmer">
-            TAE
-          </span>
-        </motion.h1>
+                            {/* Terminal Body */}
+                            <div className="bg-gray-950/95 backdrop-blur-xl rounded-b-lg border border-gray-700 p-6 min-h-[200px] font-mono">
+                                <div className="text-gray-300">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-green-400">tae</span>
+                                        <span className="text-gray-500">@</span>
+                                        <span className="text-blue-400">linux</span>
+                                        <span className="text-gray-500">~</span>
+                                        <span className="text-cyan-400">&gt;</span>
+                                        <span className="ml-2 text-green-400">{terminalText}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ) : (
+                        /* NVIM Window */
+                        <motion.div
+                            key="nvim"
+                            initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            transition={{ duration: 0.5, ease: "easeOut" }}
+                        >
+                            {/* NVIM Header */}
+                            <div className="bg-gradient-to-r from-green-900/50 via-gray-800 to-green-900/50 rounded-t-lg px-4 py-2 flex items-center justify-between border-b border-green-700/50">
+                                <div className="flex gap-2">
+                                    <div className="w-3 h-3 rounded-full bg-gray-600" />
+                                    <div className="w-3 h-3 rounded-full bg-gray-600" />
+                                    <div className="w-3 h-3 rounded-full bg-green-600" />
+                                </div>
+                                <div className="flex items-center gap-2 text-sm font-mono">
+                                    <Terminal className="w-4 h-4 text-green-400" />
+                                    <span className="text-green-400 font-bold">NVIM</span>
+                                    <span className="text-gray-500"> -</span>
+                                    <span className="text-yellow-400">devtae.xyz</span>
+                                    <span className="text-gray-600 mx-2">|</span>
+                                    <span className="text-cyan-400">NORMAL</span>
+                                </div>
+                                <div className="text-xs font-mono text-green-400">0:00</div>
+                            </div>
 
-        {/* Role */}
-        <motion.h2 variants={itemVariants} className="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
-          Linux Middleware & Embedded Systems Developer
-        </motion.h2>
+                            {/* NVIM Body */}
+                            <div className="bg-gray-950/95 backdrop-blur-xl rounded-b-lg border border-gray-700 min-h-[500px] p-6 relative">
+                                {/* Line Numbers */}
+                                <div className="absolute left-0 top-6 bottom-6 w-12 text-right pr-3 text-gray-600 font-mono text-sm select-none border-r border-gray-800">
+                                    {[...Array(25)].map((_, i) => (
+                                        <div key={i}>{i + 1}</div>
+                                    ))}
+                                </div>
 
-        {/* Location */}
-        <motion.div variants={itemVariants} className="flex items-center justify-center gap-2 text-muted-foreground mb-8">
-          <MapPin className="w-5 h-5" />
-          <span>Seoul, South Korea</span>
-        </motion.div>
+                                {/* Content */}
+                                <div className="pl-12 font-mono text-sm">
+                                    {/* Welcome Message */}
+                                    <AnimatePresence>
+                                        {showWelcome && (
+                                            <motion.div
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                className="mb-6 pb-4 border-b border-gray-700"
+                                            >
+                                                <p className="text-cyan-400 mb-1">{"// "}</p>
+                                                <p className="text-green-400 text-lg mb-1">
+                                                    <span className="text-gray-500">Welcome </span>
+                                                    <span className="text-yellow-400">devtae</span>
+                                                    <span className="text-gray-500">!</span>
+                                                </p>
+                                                <p className="text-gray-500 text-sm mb-4">Navigate using the keys or click to explore</p>
 
-        {/* Bio */}
-        <motion.p
-          variants={itemVariants}
-          className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
-        >
-          Specialized in developing robust middleware solutions and embedded systems.
-          Proficient in C, C++, Python, and Linux kernel development with deep expertise
-          in Broadcom SDK and network infrastructure.
-        </motion.p>
+                                                {/* Self Introduction */}
+                                                <div className="space-y-1 text-sm">
+                                                    <p className="text-gray-400">
+                                                        <span className="text-cyan-400">name</span>
+                                                        <span className="text-gray-600">: </span>
+                                                        <span className="text-yellow-400">kim kyung tae</span>
+                                                    </p>
+                                                    <p className="text-gray-400">
+                                                        <span className="text-cyan-400">lang</span>
+                                                        <span className="text-gray-600">: </span>
+                                                        <span className="text-green-400">c, python</span>
+                                                    </p>
+                                                    <p className="text-gray-400">
+                                                        <span className="text-cyan-400">email</span>
+                                                        <span className="text-gray-600">: </span>
+                                                        <span className="text-gray-300">k99779004@naver.com</span>
+                                                    </p>
+                                                    <p className="text-gray-400">
+                                                        <span className="text-cyan-400">call</span>
+                                                        <span className="text-gray-600">: </span>
+                                                        <span className="text-gray-300">+82)10-3205-9801</span>
+                                                    </p>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
 
-        {/* CTA Buttons */}
-        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-          <Button asChild size="lg" className="text-base px-8 py-6 h-auto bg-blue-600 hover:bg-blue-700">
-            <Link href="#projects">
-              <Github className="w-5 h-5" />
-              View Projects
-            </Link>
-          </Button>
-          <Button asChild size="lg" variant="outline" className="text-base px-8 py-6 h-auto border-2 hover:bg-accent">
-            <a href="https://tae-98.tistory.com/" target="_blank" rel="noopener noreferrer">
-              <BookOpen className="w-5 h-5" />
-              Visit Blog
-            </a>
-          </Button>
-          <Button asChild size="lg" variant="outline" className="text-base px-8 py-6 h-auto border-2 hover:bg-accent">
-            <Link href="mailto:k99779004@naver.com">
-              <Mail className="w-5 h-5" />
-              Contact Me
-            </Link>
-          </Button>
-        </motion.div>
+                                    {/* File Tree */}
+                                    <AnimatePresence>
+                                        {showFileTree && (
+                                            <motion.div
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ delay: 0.2 }}
+                                                className="space-y-1"
+                                            >
+                                                <p className="text-gray-500 mb-3">// Portfolio</p>
+                                                {fileTree.map((item, index) => (
+                                                    <motion.div
+                                                        key={item.name}
+                                                        initial={{ opacity: 0, x: -20 }}
+                                                        animate={{ opacity: 1, x: 0 }}
+                                                        transition={{ delay: 0.1 * index }}
+                                                        onClick={() => handleFileClick(item)}
+                                                        className="flex items-center gap-2 py-1 px-2 rounded hover:bg-gray-800/50 cursor-pointer transition-colors group"
+                                                    >
+                                                        {item.type === "folder" ? (
+                                                            <>
+                                                                <Folder className="w-4 h-4 text-cyan-400" />
+                                                                <span className="text-cyan-400">{item.name}</span>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <File className="w-4 h-4 text-gray-400 group-hover:text-green-400" />
+                                                                <span className="text-gray-300 group-hover:text-green-400">{item.name}</span>
+                                                            </>
+                                                        )}
+                                                    </motion.div>
+                                                ))}
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
 
-        {/* Social Links */}
-        <motion.div variants={itemVariants} className="flex gap-4 justify-center">
-          <a
-            href="https://github.com/tae9898"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            aria-label="GitHub"
-          >
-            <Github className="w-5 h-5" />
-          </a>
-          <a
-            href="https://tae-98.tistory.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            aria-label="Blog"
-          >
-            <BookOpen className="w-5 h-5" />
-          </a>
-          <a
-            href="mailto:k99779004@naver.com"
-            className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            aria-label="Email"
-          >
-            <Mail className="w-5 h-5" />
-          </a>
-        </motion.div>
-      </motion.div>
-    </section>
-  )
+                                    {/* Cursor */}
+                                    <motion.span
+                                        className="inline-block w-0.5 h-5 bg-green-400 ml-0.5"
+                                        animate={{ opacity: [1, 0, 1] }}
+                                        transition={{ duration: 1, repeat: Infinity }}
+                                    />
+                                </div>
+
+                                {/* Status Bar */}
+                                <div className="absolute bottom-0 left-0 right-0 bg-green-900/30 border-t border-green-700/30 px-4 py-2 flex items-center justify-between text-xs font-mono">
+                                    <div className="flex items-center gap-4">
+                                        <span className="text-cyan-400">NORMAL</span>
+                                        <span className="text-gray-400">--</span>
+                                        <span className="text-gray-400">readonly</span>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <span className="text-gray-400">devtae.xyz</span>
+                                        <span className="text-gray-400">100%</span>
+                                        <span className="text-green-400">✓</span>
+                                    </div>
+                                </div>
+
+                                {/* Glow Effect */}
+                                <div className="absolute -inset-1 bg-gradient-to-r from-green-600/20 via-cyan-600/20 to-green-600/20 rounded-lg blur-xl -z-10" />
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
+        </section>
+    )
 }

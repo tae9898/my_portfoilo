@@ -11,18 +11,15 @@ const skillsData = {
     { name: "C", icon: Code2, level: "Expert" },
     { name: "C++", icon: Code2, level: "Advanced" },
     { name: "Python", icon: Code2, level: "Advanced" },
-    { name: "MATLAB", icon: Code2, level: "Intermediate" },
   ],
   tools: [
     { name: "Linux", icon: Terminal, level: "Expert" },
     { name: "Broadcom SDK", icon: Cpu, level: "Advanced" },
     { name: "Git", icon: Database, level: "Advanced" },
-    { name: "GDB", icon: Wrench, level: "Intermediate" },
   ],
   domains: [
     { name: "Embedded Systems", icon: Cpu, level: "Expert" },
     { name: "Middleware", icon: Network, level: "Expert" },
-    { name: "Kernel Development", icon: Terminal, level: "Advanced" },
     { name: "Network Programming", icon: Network, level: "Advanced" },
   ],
 }
