@@ -1,6 +1,7 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -16,11 +17,14 @@ import {
   Github,
   Mail,
   Download,
-  Briefcase
+  Briefcase,
+  Check
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { type LucideIcon } from "lucide-react"
+
+const EMAIL = "k99779004@naver.com"
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -153,6 +157,63 @@ function SkillBadge({ skill }: { skill: { name: string; icon: LucideIcon; level:
   )
 }
 
+function CopyEmailButton({ className, size = "default" }: { className?: string; size?: "default" | "lg" | "sm" }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error("Failed to copy email:", err)
+    }
+  }
+
+  const iconSize = size === "lg" ? "w-5 h-5" : "w-4 h-4"
+
+  return (
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      <Button
+        onClick={handleCopy}
+        size={size}
+        className={`gap-2 cursor-pointer transition-all duration-200 hover:shadow-lg ${className || ""}`}
+      >
+        <AnimatePresence mode="wait">
+          {copied ? (
+            <motion.div
+              key="check"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="flex items-center gap-2"
+            >
+              <Check className={iconSize} />
+              Copied to clipboard
+            </motion.div>
+          ) : (
+            <motion.div
+              key="mail"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="flex items-center gap-2"
+            >
+              <Mail className={iconSize} />
+              Copy email
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </Button>
+    </motion.div>
+  )
+}
+
 export default function About() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
@@ -202,12 +263,7 @@ export default function About() {
               </div>
             </div>
             <div className="flex justify-center gap-4">
-              <Button asChild className="gap-2">
-                <Link href="mailto:k99779004@naver.com">
-                  <Mail className="w-4 h-4" />
-                  Contact
-                </Link>
-              </Button>
+              <CopyEmailButton />
               <Button variant="outline" asChild className="gap-2">
                 <Link href="/resume" className="gap-2">
                   <Download className="w-4 h-4" />
@@ -376,12 +432,7 @@ export default function About() {
               Interested in collaborating on a project or have questions about my work?
             </p>
             <div className="flex justify-center gap-4">
-              <Button asChild size="lg" className="gap-2">
-                <Link href="mailto:k99779004@naver.com">
-                  <Mail className="w-5 h-5" />
-                  Get In Touch
-                </Link>
-              </Button>
+              <CopyEmailButton size="lg" />
               <Button variant="outline" size="lg" asChild className="gap-2">
                 <Link href="https://github.com/tae9898" target="_blank" rel="noopener noreferrer">
                   <Github className="w-5 h-5" />
