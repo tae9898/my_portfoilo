@@ -31,7 +31,12 @@ export function Navigation({ items, className }: NavigationProps) {
 
   const handleNavigate = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
-    router.push(href)
+    if (href === "/") {
+      // Full page reload for home to restart animation
+      window.location.href = "/"
+    } else {
+      router.push(href)
+    }
   }
 
   return (

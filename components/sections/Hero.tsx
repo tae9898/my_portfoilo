@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Terminal, File, Folder } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 
 interface FileItem {
     name: string
@@ -21,11 +21,26 @@ const fileTree: FileItem[] = [
 
 export function Hero() {
     const router = useRouter()
+    const pathname = usePathname()
     const [terminalText, setTerminalText] = useState('')
     const [showNvim, setShowNvim] = useState(false)
     const [showFileTree, setShowFileTree] = useState(false)
     const [showWelcome, setShowWelcome] = useState(false)
     const hasStartedTyping = useRef(false)
+    const prevPathname = useRef(pathname)
+
+    // Reset state when navigating to home
+    useEffect(() => {
+        if (pathname === "/" && prevPathname.current !== "/") {
+            // Reset all state
+            hasStartedTyping.current = false
+            setTerminalText('')
+            setShowNvim(false)
+            setShowFileTree(false)
+            setShowWelcome(false)
+        }
+        prevPathname.current = pathname
+    }, [pathname])
 
     useEffect(() => {
         if (hasStartedTyping.current) return
@@ -55,7 +70,7 @@ export function Hero() {
         }, 500)
 
         return () => clearTimeout(startDelay)
-    }, [])
+    }, [showNvim]) // Re-run when showNvim changes (after reset)
 
     const handleFileClick = (item: FileItem) => {
         if (item.path.startsWith("http")) {

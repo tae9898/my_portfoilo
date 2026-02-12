@@ -65,8 +65,13 @@ export function Header() {
   }, [])
 
   const handleNavigate = (href: string) => {
-    router.push(href)
     setIsMobileMenuOpen(false)
+    if (href === "/") {
+      // Full page reload for home to restart animation
+      window.location.href = "/"
+    } else {
+      router.push(href)
+    }
   }
 
   return (
