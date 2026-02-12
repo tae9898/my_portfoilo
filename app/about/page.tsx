@@ -19,6 +19,7 @@ import {
   Briefcase
 } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { type LucideIcon } from "lucide-react"
 
 const containerVariants = {
@@ -46,92 +47,90 @@ const itemVariants = {
 
 const skillsData = {
   languages: [
-    { name: "C", icon: Code2, level: "Expert", years: 8 },
-    { name: "C++", icon: Code2, level: "Advanced", years: 7 },
-    { name: "Python", icon: Code2, level: "Advanced", years: 5 },
-    { name: "Shell", icon: Terminal, level: "Advanced", years: 6 },
-    { name: "JavaScript", icon: Code2, level: "Intermediate", years: 2 },
+    { name: "C", icon: Code2, level: "Expert" },
+    { name: "C++", icon: Code2, level: "Advanced" },
+    { name: "Python", icon: Code2, level: "Advanced" },
+    { name: "Shell", icon: Terminal, level: "Advanced" },
   ],
   tools: [
-    { name: "Linux", icon: Terminal, level: "Expert", years: 8 },
-    { name: "Broadcom SDK", icon: Cpu, level: "Advanced", years: 6 },
-    { name: "Git", icon: Database, level: "Advanced", years: 6 },
-    { name: "Make", icon: Wrench, level: "Expert", years: 7 },
-    { name: "CMake", icon: Wrench, level: "Advanced", years: 4 },
-    { name: "Docker", icon: Database, level: "Intermediate", years: 2 },
-    { name: "Jenkins", icon: Database, level: "Intermediate", years: 2 },
+    { name: "Linux", icon: Terminal, level: "Expert" },
+    { name: "Broadcom SDK", icon: Cpu, level: "Advanced" },
+    { name: "Git", icon: Database, level: "Advanced" },
+    { name: "Make", icon: Wrench, level: "Expert" },
+    { name: "CMake", icon: Wrench, level: "Advanced" },
+    { name: "Docker", icon: Database, level: "Intermediate" },
   ],
   domains: [
-    { name: "Embedded Systems", icon: Cpu, level: "Expert", years: 7 },
-    { name: "Middleware", icon: Network, level: "Expert", years: 8 },
-    { name: "Network Programming", icon: Network, level: "Advanced", years: 6 },
-    { name: "System Architecture", icon: Cpu, level: "Advanced", years: 6 },
-    { name: "Performance Optimization", icon: Wrench, level: "Advanced", years: 5 },
-  ],
-  hardware: [
-    { name: "ARM Architecture", icon: Cpu, level: "Advanced", years: 6 },
-    { name: "Network Processors", icon: Network, level: "Expert", years: 5 },
-    { name: "FPGA", icon: Cpu, level: "Intermediate", years: 2 },
-    { name: "PCIe", icon: Network, level: "Advanced", years: 4 },
-    { name: "DMA", icon: Wrench, level: "Advanced", years: 5 },
+    { name: "Embedded Systems", icon: Cpu, level: "Expert" },
+    { name: "Middleware", icon: Network, level: "Expert" },
+    { name: "Network Programming", icon: Network, level: "Advanced" },
+    { name: "System Architecture", icon: Cpu, level: "Advanced" },
+    { name: "Performance Optimization", icon: Wrench, level: "Advanced" },
   ]
 }
 
 const experienceData = [
   {
-    title: "Senior Linux Middleware Engineer",
-    company: "Network Systems Company",
-    period: "2021 - Present",
-    description: "Leading middleware development for network systems, focusing on performance optimization and scalability.",
+    title: "nftables migration",
+    company: "Network Middleware Development",
+    period: "Network Protocol Stack",
+    description: "iptables에서 nftables로 마이그레이션 및 네이티브 환경 최적화",
     achievements: [
-      "Optimized packet processing pipeline by 40%",
-      "Developed custom Linux kernel modules",
-      "Led team of 5 engineers on major project",
-      "Reduced memory footprint by 30%"
+      "iptables 포팅 (Hidden API, PON 관련 Ebtables 함수, Access Control, Port Loop Detect, DHCPD Update)",
+      "Port Trigger 기능을 iptables 모듈에서 nftables rule base로 포팅",
+      "map, set, mark를 이용한 구현 (set: related port 개방, map: NAT)",
+      "iptables 모듈 의존성 제거 및 nftables 네이티브 환경 구조 최적화",
+      "커널 모듈 없이 Rule 조합만으로 구현"
     ]
   },
   {
-    title: "Embedded Systems Developer",
-    company: "Telecommunications Solutions",
-    period: "2019 - 2021",
-    description: "Developed embedded software for network equipment using Broadcom SDK and Linux kernel.",
+    title: "Hidden Log exe 제작",
+    company: "Debugging Tool Development [협업]",
+    period: "Productivity Tool",
+    description: "필드 이슈시 원격 디버깅을 위한 자동화 도구 개발",
     achievements: [
-      "Implemented real-time data processing systems",
-      "Developed device drivers for network interfaces",
-      "Created comprehensive test suites",
-      "Reduced system latency by 25%"
+      "LAN 내 원격 PC tool(AnyDesk) 없이 디버깅 가능하도록 API 개발",
+      "한 번의 API 실행(POST)으로 현 위치에 log, sys info 등 요구 파일 자동 저장",
+      "파일 encryption 기능 추가",
+      "Python 프로그램을 통해 API 실행 명령어 간소화 및 decryption 기능 구현",
+      "WiFi 파트와 협업하여 개발팀 전체 생산성 향상에 기여"
     ]
   },
   {
-    title: "Software Engineer",
-    company: "Tech Startup",
-    period: "2017 - 2019",
-    description: "Worked on IoT devices and embedded systems, developing firmware and middleware components.",
+    title: "Spirent 계측기 테스트 자동화",
+    company: "Network Testing",
+    period: "Test Automation",
+    description: "Spirent 계측기를 활용한 네트워크 장비 테스트 환경 구축",
     achievements: [
-      "Built custom communication protocols",
-      "Optimized power consumption for battery devices",
-      "Implemented secure boot mechanisms",
-      "Created automation tools for testing"
+      "Device와 Packet Gen 생성 및 컨트랙 테이블 이해",
+      "WAN, LAN에 적합한 디바이스와 패킷 생성",
+      "매크로 기능을 활용한 원하는 테스트 자동화 실행",
+      "DevOps 협업으로 네트워크실 계측기를 원격에서 console 확인 가능하도록 구성",
+      "회사 내부 계측기 사용 자립화로 타부서 의존성 제거"
     ]
   }
 ]
 
-const educationData = [
-  {
-    degree: "Master of Science in Computer Engineering",
-    institution: "Seoul National University",
-    period: "2015 - 2017",
-    description: "Specialized in embedded systems and real-time computing"
-  },
-  {
-    degree: "Bachelor of Science in Computer Science",
-    institution: "Korea University",
-    period: "2011 - 2015",
-    description: "Focus on systems programming and operating systems"
-  }
-]
+const devOpsData = {
+  title: "DevOps & Tooling",
+  description: "생산성을 극대화하는 커스텀 개발 환경 구축",
+  items: [
+    {
+      category: "Shell Scripting",
+      description: "Fish Shell 기반으로 복잡한 펌웨어 빌드 및 배포 파이프라인을 함수화(mk*, upgrade_fw)하여, 반복 작업에 소요되는 시간을 일 30분 이상 단축하고 휴먼 에러를 방지"
+    },
+    {
+      category: "Code Analysis",
+      description: "대규모 커널 소스 분석을 위해 Clangd와 Bear를 연동한 Neovim 환경을 구축, IDE 수준의 코드 네비게이션과 정적 분석 기능을 경량화된 환경에서 구현"
+    },
+    {
+      category: "AI Integration",
+      description: "에디터 내에 LLM(ChatGPT)을 통합하여 레거시 코드 리팩토링 및 문서화 작업을 반자동화하고, Tmux 로깅 플러그인을 활용해 장기 테스트 로그 관리 프로세스를 정립"
+    }
+  ]
+}
 
-function SkillBadge({ skill }: { skill: { name: string; icon: LucideIcon; level: string; years: number } }) {
+function SkillBadge({ skill }: { skill: { name: string; icon: LucideIcon; level: string } }) {
   const Icon = skill.icon
 
   return (
@@ -147,7 +146,7 @@ function SkillBadge({ skill }: { skill: { name: string; icon: LucideIcon; level:
         <Icon className="w-4 h-4 mr-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
         {skill.name}
         <span className="ml-2 text-xs text-muted-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400">
-          {skill.level} • {skill.years}y
+          {skill.level}
         </span>
       </Badge>
     </motion.div>
@@ -167,6 +166,24 @@ export default function About() {
           className="max-w-4xl mx-auto text-center"
         >
           <motion.div variants={itemVariants}>
+            {/* Profile Photo */}
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="mb-8 flex justify-center"
+            >
+              <div className="relative w-32 h-32 md:w-40 md:h-40">
+                <Image
+                  src="/profile.jpg"
+                  alt="TAE Profile"
+                  fill
+                  className="rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-lg"
+                  priority
+                />
+              </div>
+            </motion.div>
+
             <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
               Hello, I&apos;m TAE
             </h1>
@@ -181,7 +198,7 @@ export default function About() {
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Briefcase className="w-4 h-4" />
-                8+ Years Experience
+                2+ Years Experience
               </div>
             </div>
             <div className="flex justify-center gap-4">
@@ -215,7 +232,7 @@ export default function About() {
               <h2 className="text-3xl md:text-4xl font-bold mb-6">About Me</h2>
               <div className="prose prose-lg dark:prose-invert max-w-none">
                 <p className="text-muted-foreground mb-4">
-                  I&apos;m a passionate developer with 8+ years of experience in Linux kernel programming,
+                  I&apos;m a passionate developer with 2+ years of experience in Linux kernel programming,
                   embedded systems, and middleware development. My expertise lies in creating high-performance,
                   reliable software for network equipment and embedded platforms.
                 </p>
@@ -286,22 +303,6 @@ export default function About() {
                   </CardContent>
                 </Card>
 
-                {/* Hardware */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-3">
-                      <Cpu className="w-6 h-6 text-green-600 dark:text-green-400" />
-                      Hardware & Systems
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-3">
-                      {skillsData.hardware.map((skill) => (
-                        <SkillBadge key={skill.name} skill={skill} />
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
               </div>
             </motion.div>
 
@@ -337,24 +338,20 @@ export default function About() {
               </div>
             </motion.div>
 
-            {/* Education Section */}
-            <motion.div variants={itemVariants}>
-              <h2 className="text-3xl md:text-4xl font-bold mb-8">Education</h2>
-              <div className="space-y-6">
-                {educationData.map((edu, index) => (
-                  <Card key={index}>
+            {/* DevOps & Tooling Section */}
+            <motion.div variants={itemVariants} className="mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">{devOpsData.title}</h2>
+              <p className="text-lg text-muted-foreground mb-8">{devOpsData.description}</p>
+              <div className="space-y-4">
+                {devOpsData.items.map((item, index) => (
+                  <Card key={index} className="border-l-4 border-l-purple-600">
                     <CardHeader>
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                        <CardTitle className="text-xl">{edu.degree}</CardTitle>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Calendar className="w-4 h-4" />
-                          {edu.period}
-                        </div>
-                      </div>
-                      <p className="text-lg text-muted-foreground font-medium">{edu.institution}</p>
+                      <CardTitle className="text-lg text-purple-600 dark:text-purple-400">
+                        {item.category}
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-muted-foreground">{edu.description}</p>
+                      <p className="text-muted-foreground">{item.description}</p>
                     </CardContent>
                   </Card>
                 ))}

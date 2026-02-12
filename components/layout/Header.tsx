@@ -3,12 +3,13 @@
 import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Navigation, NavigationItem } from "./Navigation"
 import { cn } from "@/lib/utils"
 
 const navigationItems: NavigationItem[] = [
-  { label: "Home", href: "/#home" },
+  { label: "Home", href: "/" },
   { label: "Projects", href: "/projects" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
@@ -50,6 +51,7 @@ const mobileItemVariants = {
 }
 
 export function Header() {
+  const router = useRouter()
   const [isScrolled, setIsScrolled] = React.useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
 
@@ -62,23 +64,9 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const handleNavigate = () => {
+  const handleNavigate = (href: string) => {
+    router.push(href)
     setIsMobileMenuOpen(false)
-  }
-
-  const handleMobileClick = (href: string, e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
-    const targetId = href.substring(1)
-    const element = document.getElementById(targetId)
-    
-    if (element) {
-      const offsetTop = element.offsetTop - 56 // Mobile header height
-      window.scrollTo({
-        top: offsetTop,
-        behavior: "smooth"
-      })
-      setIsMobileMenuOpen(false)
-    }
   }
 
   return (
@@ -97,22 +85,24 @@ export function Header() {
       >
         <div className="container mx-auto px-4 h-full flex items-center justify-between">
           {/* Logo */}
-          <motion.a
-            href="#home"
-            onClick={(e) => handleMobileClick("#home", e)}
-            className="font-mono text-lg font-medium tracking-tight"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+          <button
+            onClick={() => handleNavigate("/")}
+            className="font-mono text-lg font-medium tracking-tight bg-transparent border-0 cursor-pointer"
           >
-            <span className="text-foreground/50">[</span>
-            <span className="text-foreground mx-0.5">TAE</span>
-            <span className="text-foreground/50">]</span>
-          </motion.a>
+            <motion.span
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <span className="text-foreground/50">[</span>
+              <span className="text-foreground mx-0.5">TAE</span>
+              <span className="text-foreground/50">]</span>
+            </motion.span>
+          </button>
 
           {/* Desktop Navigation */}
           <div className="hidden md:block">
-            <Navigation items={navigationItems} onNavigate={handleNavigate} />
+            <Navigation items={navigationItems} />
           </div>
 
           {/* Mobile Menu Button */}
@@ -169,16 +159,18 @@ export function Header() {
           >
             <nav className="flex flex-col gap-2 mt-8">
               {navigationItems.map((item, index) => (
-                <motion.a
+                <motion.div
                   key={item.href}
-                  href={item.href}
-                  onClick={(e) => handleMobileClick(item.href, e)}
                   custom={index}
                   variants={mobileItemVariants}
-                  className="px-4 py-3 text-lg font-medium tracking-wide text-foreground/70 hover:text-foreground hover:bg-accent rounded-md transition-colors"
                 >
-                  {item.label}
-                </motion.a>
+                  <button
+                    onClick={() => handleNavigate(item.href)}
+                    className="block w-full text-left px-4 py-3 text-lg font-medium tracking-wide text-foreground/70 hover:text-foreground hover:bg-accent rounded-md transition-colors bg-transparent border-0 cursor-pointer"
+                  >
+                    {item.label}
+                  </button>
+                </motion.div>
               ))}
             </nav>
             
