@@ -20,8 +20,8 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
       transition={{ duration: 0.3, delay: index * 0.05 }}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
     >
-      <Card className="h-full flex flex-col group hover:border-primary/50 transition-colors cursor-pointer">
-        <Link href={`/projects/${project.id}`} className="flex-1 flex flex-col">
+      <Card className="h-full flex flex-col group hover:border-primary/50 transition-colors">
+        <Link href={`/projects/${project.id}`} className="flex-1 flex flex-col cursor-pointer">
           <CardHeader>
             <div className="flex items-start justify-between gap-2">
               <CardTitle className="text-xl group-hover:text-primary transition-colors">
@@ -47,13 +47,13 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             ))}
           </div>
         </CardContent>
+        </Link>
 
         <CardFooter className="flex gap-3 pt-4 border-t">
           <Link
             href={project.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
             className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             <Github className="w-4 h-4" />
@@ -64,7 +64,6 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
               className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               <ExternalLink className="w-4 h-4" />
@@ -72,7 +71,6 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             </Link>
           )}
         </CardFooter>
-        </Link>
       </Card>
     </motion.div>
   );
