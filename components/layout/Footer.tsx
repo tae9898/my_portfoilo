@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { Github, Mail, BookOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { LanguageSelector } from "@/components/LanguageSelector"
 
 interface SocialLink {
   label: string
@@ -83,6 +84,9 @@ export function Footer({ className }: FooterProps) {
           >
             &copy; {currentYear} <span className="mx-1">[</span>TAE<span className="mx-1">]</span>. All rights reserved.
           </motion.p>
+
+          {/* Language Selector */}
+          <LanguageSelector />
         </div>
       </div>
     </footer>
