@@ -5,34 +5,19 @@ import { projects, projectCategories, type ProjectCategory } from '@/lib/data';
 import { ProjectCard } from '@/components/ProjectCard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
 
 export default function ProjectsPage() {
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategory>('all');
-  const [searchQuery, setSearchQuery] = useState('');
 
   const filteredProjects = useMemo(() => {
-    let result = selectedCategory === 'all'
+    return selectedCategory === 'all'
       ? projects
       : projects.filter(p => p.category === selectedCategory);
-
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      result = result.filter(p =>
-        p.title.toLowerCase().includes(query) ||
-        p.description.toLowerCase().includes(query) ||
-        p.techStack.some(tech => tech.toLowerCase().includes(query))
-      );
-    }
-
-    return result;
-  }, [selectedCategory, searchQuery]);
+  }, [selectedCategory]);
 
   const featuredProjects = useMemo(() => {
-    if (searchQuery.trim()) return [];
     return projects.filter(p => p.featured);
-  }, [searchQuery]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -44,20 +29,6 @@ export default function ProjectsPage() {
             <p className="text-muted-foreground mt-1">
               A collection of my work in embedded systems, trading automation, and Python tools
             </p>
-          </div>
-
-          {/* Search Bar */}
-          <div className="mb-6">
-            <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search projects by title, description, or tech stack..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
           </div>
 
           {/* Category Filters */}
@@ -87,7 +58,7 @@ export default function ProjectsPage() {
             transition={{ duration: 0.2 }}
           >
             {/* Section title based on selection */}
-            {searchQuery === '' && selectedCategory === 'all' && featuredProjects.length > 0 && (
+            {selectedCategory === 'all' && featuredProjects.length > 0 && (
               <section className="mb-16">
                 <h2 className="text-2xl font-semibold mb-6">Featured Projects</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -110,7 +81,7 @@ export default function ProjectsPage() {
             )}
 
             {/* Category-specific view or non-featured projects */}
-            {(selectedCategory !== 'all' || featuredProjects.length === 0 || searchQuery !== '') && (
+            {(selectedCategory !== 'all' || featuredProjects.length === 0) && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredProjects.length > 0 ? (
                   filteredProjects.map((project, index) => (
@@ -119,7 +90,7 @@ export default function ProjectsPage() {
                 ) : (
                   <div className="col-span-full text-center py-12">
                     <p className="text-muted-foreground">
-                      {searchQuery ? `No projects found matching "${searchQuery}"` : 'No projects found in this category.'}
+                      No projects found in this category.
                     </p>
                   </div>
                 )}
