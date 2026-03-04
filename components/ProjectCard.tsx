@@ -50,15 +50,22 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
         </Link>
 
         <CardFooter className="flex gap-3 pt-4 border-t">
-          <Link
-            href={project.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Github className="w-4 h-4" />
-            <span>Code</span>
-          </Link>
+          {project.githubUrl === '#' ? (
+            <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+              <Github className="w-4 h-4 text-muted-foreground" />
+              <span className="text-muted-foreground">Internal Project</span>
+            </span>
+          ) : (
+            <Link
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Github className="w-4 h-4" />
+              <span>GitHub</span>
+            </Link>
+          )}
           {project.liveUrl && (
             <Link
               href={project.liveUrl}

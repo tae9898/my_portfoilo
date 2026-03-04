@@ -164,6 +164,40 @@ export default function About() {
 
   const experienceData = [
     {
+      title: t("experience.tfliteChatbot.title"),
+      company: t("experience.tfliteChatbot.category"),
+      period: t("experience.tfliteChatbot.period"),
+      description: t("experience.tfliteChatbot.description"),
+      achievements: language === "ko" ? [
+        "TFLite 모델을 활용한 intent 분류 시스템 구현 및 threshold 최적화",
+        "모델 연산 최적화 (2회→1회) 및 RAG 아키텍처 설계",
+        "백엔드 API 연동 및 access token 캐싱 함수 구현",
+        "8가지 테스트 케이스 API 구현 및 검증 완료"
+      ] : [
+        "Implemented intent classification system using TFLite model with threshold optimization",
+        "Optimized model inference (2→1 operations) and designed RAG architecture",
+        "Integrated backend API with access token caching",
+        "Implemented and verified 8 test case APIs"
+      ]
+    },
+    {
+      title: t("experience.sdkMigration.title"),
+      company: t("experience.sdkMigration.category"),
+      period: t("experience.sdkMigration.period"),
+      description: t("experience.sdkMigration.description"),
+      achievements: language === "ko" ? [
+        "Bringup 이후 POCS 브랜치 마이그레이션 수행",
+        "Python 자동화 스크립트 개발로 마이그레이션 시간 80% 단축",
+        "실패 내역 자동 수집 및 엑셀 리포트 생성, 업무 분배 체계화",
+        "충돌 항목 수동 merge 및 Jira daily 진척 보고"
+      ] : [
+        "Performed POCS branch migration after bringup",
+        "Developed Python automation scripts reducing migration time by 80%",
+        "Automated failure tracking with Excel reports and task distribution",
+        "Manual merge of conflicts and daily Jira progress reporting"
+      ]
+    },
+    {
       title: t("experience.nftables.title"),
       company: t("experience.nftables.category"),
       period: t("experience.nftables.period"),
@@ -275,8 +309,23 @@ export default function About() {
               </div>
             </motion.div>
 
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-              {t("about.title")}
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="block bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent"
+              >
+                {t("about.titleLine1")}
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                className="block bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent"
+              >
+                {t("about.titleLine2")}
+              </motion.span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               {t("about.subtitle")}
