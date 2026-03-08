@@ -14,17 +14,23 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("ko")
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const saved = localStorage.getItem("language") as Language
-    if (saved && (saved === "en" || saved === "ko")) {
-      setLanguage(saved)
+    setMounted(true)
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("language") as Language
+      if (saved && (saved === "en" || saved === "ko")) {
+        setLanguage(saved)
+      }
     }
   }, [])
 
   const handleSetLanguage = (lang: Language) => {
     setLanguage(lang)
-    localStorage.setItem("language", lang)
+    if (typeof window !== "undefined") {
+      localStorage.setItem("language", lang)
+    }
   }
 
   const t = (key: string): string => {
@@ -36,6 +42,15 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       }
     }
     return typeof value === "string" ? value : key
+  }
+
+  // Prevent hydration mismatch by not rendering children until mounted
+  if (!mounted) {
+    return (
+      <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, t }}>
+        {children}
+      </LanguageContext.Provider>
+    )
   }
 
   return (
@@ -73,7 +88,7 @@ const translations = {
     about: {
       titleLine1: "Linux Middleware Developer",
       titleLine2: "Kim Gyeongtae",
-      subtitle: "An embedded junior developer who loves tech. I'm always the first to share new tools with colleagues and friends. That's why I mainly handle new business initiatives (AI) at work. Outside of work, I'm building trading bots as side projects!",
+      subtitle: "Embedded junior developer Kim Gyeongtae\nI love sharing new tools with colleagues and friends first\nThat's why I'm mainly handling new business initiatives (AI) at work\nOutside of work, I'm building trading bots as side projects!",
       location: "Seoul, South Korea",
       experience: "2+ Years Experience",
       copyEmail: "Copy email",
@@ -247,7 +262,7 @@ const translations = {
     about: {
       titleLine1: "linux middleware 개발자",
       titleLine2: "김경태 입니다",
-      subtitle: "tech 좋아하는 임베디드 주니어 개발자에요. 새로운 tool 나오면 주변 동료, 친구들에게 먼저 전파해요. 그러다 보니 회사에서는 주로 신사업부분을 맡아 하고있습니다(ai). 그 외에 side 프로젝트로 trading bot 만들면서 놀고있습니다!",
+      subtitle: "임베디드 주니어 개발자 김경태입니다\n새로운 tool 나오면 주변 동료, 친구들에게 먼저 전파해요\n그러다 보니(?) 회사에서도 신사업부분을 맡아 하고있습니다(ai)\n그 외에 side 프로젝트로 trading bot 만들면서 놀고있습니다!",
       location: "대한민국 서울",
       experience: "2년 이상 경력",
       copyEmail: "이메일 복사",

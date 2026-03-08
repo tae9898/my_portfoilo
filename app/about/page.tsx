@@ -327,9 +327,11 @@ export default function About() {
                 {t("about.titleLine2")}
               </motion.span>
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              {t("about.subtitle")}
-            </p>
+            <div className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto space-y-1">
+              {t("about.subtitle").split('\n').map((line, index) => (
+                <p key={index}>{line}</p>
+              ))}
+            </div>
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <MapPin className="w-4 h-4" />
